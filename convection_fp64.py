@@ -75,8 +75,8 @@ else:
 
 
 
-optim = Adam(model.parameters(),lr=1e-6)
-#optim = LBFGS(model.parameters(), line_search_fn='strong_wolfe', tolerance_grad = 1e-8, tolerance_change= 1e-10)
+#optim = Adam(model.parameters(),lr=1e-6)
+optim = LBFGS(model.parameters(), line_search_fn='strong_wolfe', tolerance_grad = 1e-8, tolerance_change= 1e-10)
 print(model)
 print(get_n_params(model))
 
