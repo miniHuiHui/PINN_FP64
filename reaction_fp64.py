@@ -55,12 +55,12 @@ def init_weights(m):
 
 if args.model == 'KAN':
     model = get_model(args).Model(width=[2, 5, 1], grid=5, k=3, grid_eps=1.0, \
-                                  noise_scale_base=0.25, device=device).to(device)
+                                  noise_scale_base=0.25, device=device).to(torch.float64).to(device)
 elif args.model == 'QRes':
-    model = get_model(args).Model(in_dim=2, hidden_dim=256, out_dim=1, num_layer=4).to(device)
+    model = get_model(args).Model(in_dim=2, hidden_dim=256, out_dim=1, num_layer=4).to(torch.float64).to(device)
     model.apply(init_weights)
 elif args.model == 'PINNsFormer' or args.model == 'PINNsFormer_Enc_Only':
-    model = get_model(args).Model(in_dim=2, hidden_dim=32, out_dim=1, num_layer=1).to(device)
+    model = get_model(args).Model(in_dim=2, hidden_dim=32, out_dim=1, num_layer=1).to(torch.float64).to(device)
     model.apply(init_weights)
 else:
     model = get_model(args).Model(in_dim=2, hidden_dim=1024, out_dim=1, num_layer=6).to(torch.float64).to(device)
