@@ -52,11 +52,11 @@ for iter in tqdm(range(1)):
     if args.model == 'PINNsFormer' or args.model == 'PINNMamba':
         res_test = make_time_sequence(res_test, num_step=num_step, step=step_size)
 
-    res = torch.tensor(res, dtype=torch.float32, requires_grad=True).to(device)
-    b_left = torch.tensor(b_left, dtype=torch.float32, requires_grad=True).to(device)
-    b_right = torch.tensor(b_right, dtype=torch.float32, requires_grad=True).to(device)
-    b_upper = torch.tensor(b_upper, dtype=torch.float32, requires_grad=True).to(device)
-    b_lower = torch.tensor(b_lower, dtype=torch.float32, requires_grad=True).to(device)
+    res = torch.tensor(res, dtype=torch.float64, requires_grad=True).to(device)
+    b_left = torch.tensor(b_left, dtype=torch.float64, requires_grad=True).to(device)
+    b_right = torch.tensor(b_right, dtype=torch.float64, requires_grad=True).to(device)
+    b_upper = torch.tensor(b_upper, dtype=torch.float64, requires_grad=True).to(device)
+    b_lower = torch.tensor(b_lower, dtype=torch.float64, requires_grad=True).to(device)
 
     x_res, t_res = res[:, ..., 0:1], res[:, ..., 1:2]
     x_left, t_left = b_left[:, ..., 0:1], b_left[:, ..., 1:2]
@@ -76,15 +76,15 @@ for iter in tqdm(range(1)):
         model.apply(init_weights)
     elif args.model == 'KAN':
         model = get_model(args).Model(width=[2, 5, 5, 1], grid=5, k=3, grid_eps=1.0, \
-                                    noise_scale_base=0.25, device=device).to(torch.float32).to(device)
+                                    noise_scale_base=0.25, device=device).to(torch.float64).to(device)
     elif args.model == 'QRes':
-        model = get_model(args).Model(in_dim=2, hidden_dim=256, out_dim=1, num_layer=4).to(torch.float32).to(device)
+        model = get_model(args).Model(in_dim=2, hidden_dim=256, out_dim=1, num_layer=4).to(torch.float64).to(device)
         model.apply(init_weights)
     elif args.model == 'PINNsFormer' or args.model == 'PINNsFormer_Enc_Only':
-        model = get_model(args).Model(in_dim=2, hidden_dim=32, out_dim=1, num_layer=1).to(torch.float32).to(device)
+        model = get_model(args).Model(in_dim=2, hidden_dim=32, out_dim=1, num_layer=1).to(torch.float64).to(device)
         model.apply(init_weights)
     else:
-        model = get_model(args).Model(in_dim=2, hidden_dim=512, out_dim=1, num_layer=4).to(torch.float32).to(device)
+        model = get_model(args).Model(in_dim=2, hidden_dim=512, out_dim=1, num_layer=4).to(torch.float64).to(device)
         model.apply(init_weights)
 
     optim = LBFGS(model.parameters(), line_search_fn='strong_wolfe')
@@ -152,7 +152,7 @@ for iter in tqdm(range(1)):
     data = np.concatenate((np.expand_dims(x_mesh, -1), np.expand_dims(t_mesh, -1)), axis=-1)
     res_test = data.reshape(-1, 2)
 
-    res_test = torch.tensor(res_test, dtype=torch.float32, requires_grad=True).to(device)
+    res_test = torch.tensor(res_test, dtype=torch.float64, requires_grad=True).to(device)
     x_test, t_test = res_test[:, ..., 0:1], res_test[:, ..., 1:2]
 
     with torch.no_grad():
